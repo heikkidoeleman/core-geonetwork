@@ -16,14 +16,14 @@ html,body {
 
 #main {
 	padding: 10px;
-	padding-bottom: 70px; /* height of the footer */
+	padding-bottom: 40px; /* height of the footer */
 }
 
 #footer {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	height: 70px; /* height of the footer */
+	height: 40px; /* height of the footer */
 }
 /* end of stuff to keep the footer down */
 html,body,button,input,select,textarea {
@@ -82,29 +82,29 @@ body {
 }
 
 /* ===================
-    ALL: Orange Theme
+    ALL: Blue Theme
    =================== */
 #header header {
-	background: #e17000;
+	background: #174375;
 	margin-top: 80px;
 	width: 100%;
 }
 
 #header {
-	border-bottom: 10px solid #f6d4b2;
-	padding: 10px 0px 0px;
-	background-image: url('../img/banner_left.jpg');
+	border-bottom: 10px solid #007bc7;
+	padding: 9px 0px 0px;
+	background-image: url('../img/banner_left.png');
 	background-repeat: no-repeat;
 	background-position: left top;
 	background-color: #fff;
 }
 
 #footer,.main aside {
-	border-top: 10px solid #f6d4b2;
+	border-top: 10px solid #007bc7;
 }
 
 #footer,.main aside {
-	background: #e17000;
+	background: #174375;
 }
 
 /* please use this for headers of facet filters to the left; cf. http://pdok.cdxi.nl/nl/pdok-producten */
@@ -132,7 +132,7 @@ nav a {
 	text-decoration: none;
 	font-weight: bold;
 	color: white;
-	background: #f6d4b2;
+	background: #007bc7;
 }
 
 nav a:hover,nav a:visited {
@@ -164,10 +164,33 @@ nav a:hover {
 }
 
 /* ===============
+ Left aside sidebar
+   =============== */
+aside#main-aside header {
+	padding-top: 6px;
+	font-weight: bolder;
+	font-size: larger;
+}
+
+aside#main-aside ul {
+	list-style-type: none;
+}
+
+/* ===============
     ALL: IE Fixes
    =============== */
 .ie7 .title {
 	padding-top: 20px;
+}
+
+/*
+	Override ExtJS
+*/
+.x-panel-header {
+	border-color: #007bc7;
+	background-color: #174375;
+	background-image: none;
+	color: white;
 }
 
 /* ==========================================================================
@@ -200,7 +223,7 @@ nav a:hover {
 	ul#main-buttons {
 		float: right;
 		margin-right: 1.7%;
-		margin-top: 100px;
+		margin-top: 30px;
 		margin-bottom: 0px;
 	}
 	ul#main-buttons li {
@@ -221,7 +244,7 @@ nav a:hover {
 		xclear: both;
 		float: right;
 		padding: 20px 0px 0px;
-		margin: 75px 20px 0px;
+		margin: 5px 20px 0px;
 	}
 	#legend-search {
 		color: #fff;
@@ -295,7 +318,7 @@ nav a:hover {
 		float: left;
 	}
 	nav {
-		margin: 100px 0px 0px;
+		margin: 33px 0px 0px;
 		xclear: both;
 		float: left;
 		width: 45%;
@@ -306,19 +329,24 @@ nav a:hover {
    ============ */
 	.main article {
 		float: left;
-		width: 57%;
+		width: 78%;
+		margin: 10px;
 	}
-	.main aside {
+	article aside#secondary-aside {
 		float: right;
-		width: 28%;
+		width: 200px;
+		padding: 0px;
+	}
+	.main aside#main-aside {
+		float: left;
+		width: 10%;
 	}
 }
 
 @media only screen and (min-width: 1140px) { /* ===============
     Maximal Width
    =============== */
-	.wrapper {
-		width: 1026px; /* 1140px - 10% for margins */
+	.wrapper { /*width: 1026px;  1140px - 10% for margins */
 		margin: 0 auto;
 	}
 }
