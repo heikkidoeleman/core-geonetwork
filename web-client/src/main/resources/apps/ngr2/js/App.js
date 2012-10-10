@@ -10,34 +10,108 @@ GeoNetwork.app = function() {
 	return {
 		generateAdvancedSearchForm : function() {
 
-			// formItems.push(GeoNetwork.util.SearchFormTools.getSimpleFormFields(
-			// catalogue.services, GeoNetwork.map.BACKGROUND_LAYERS,
-			// GeoNetwork.map.MAP_OPTIONS, true,
-			// GeoNetwork.searchDefault.activeMapControlExtent, undefined,
-			// {
-			// width : 290
-			// }), adv);
+			var advancedCriteria = [];
+			// Multi select keyword
+			var themekeyStore = new GeoNetwork.data.OpenSearchSuggestionStore({
+				url : catalogue.services.opensearchSuggest,
+				rootId : 1,
+				baseParams : {
+					field : 'keyword'
+				}
+			});
 
-			var what = [];
-
-			what.push(new GeoNetwork.form.OpenSearchSuggestionTextField({
-				hideLabel : true,
-				width : 285,
-				minChars : 2,
-				loadingText : '...',
-				hideTrigger : true,
-				url : catalogue.services.opensearchSuggest
-			}));
-
-			// {
-			// title:OpenLayers.i18n('What'),
-			// margins:'0 5 0 0',
-			// layout:'form',
-			// items:[
-			// advancedCriteria,GeoNetwork.util.SearchFormTools.getTypesField(GeoNetwork.searchDefault.activeMapControlExtent,
-			// true)
-			// ]
+			var themekeyField = new Ext.ux.form.SuperBoxSelect({
+				hideLabel : false,
+				minChars : 0,
+				queryParam : 'q',
+				hideTrigger : false,
+				id : 'E_themekey',
+				name : 'E_themekey',
+				store : themekeyStore,
+				valueField : 'value',
+				displayField : 'value',
+				valueDelimiter : ' or ',
+				// tpl: tpl,
+				fieldLabel : OpenLayers.i18n('keyword')
+			// FIXME : Allow new data is not that easy
+			// allowAddNewData: true,
+			// addNewDataOnBlur: true,
+			// listeners: {
+			// newitem: function(bs,v, f){
+			// var newObj = {
+			// value: v
+			// };
+			// bs.addItem(newObj, true);
 			// }
+			// }
+			});
+
+			var orgNameStore = new GeoNetwork.data.OpenSearchSuggestionStore({
+				url : catalogue.services.opensearchSuggest,
+				rootId : 1,
+				baseParams : {
+					field : 'orgName'
+				}
+			});
+
+			var orgNameField = new Ext.ux.form.SuperBoxSelect({
+				hideLabel : false,
+				minChars : 0,
+				queryParam : 'q',
+				hideTrigger : false,
+				id : 'E_orgName',
+				name : 'E_orgName',
+				store : orgNameStore,
+				valueField : 'value',
+				displayField : 'value',
+				valueDelimiter : ' or ',
+				// tpl: tpl,
+				fieldLabel : OpenLayers.i18n('org')
+			});
+			var categoryField = GeoNetwork.util.SearchFormTools
+					.getCategoryField(catalogue.services.getCategories,
+							'../images/default/category/', true);
+
+			var spatialTypes = GeoNetwork.util.SearchFormTools
+					.getSpatialRepresentationTypeField(null, true);
+
+			var denominatorField = GeoNetwork.util.SearchFormTools
+					.getScaleDenominatorField(true);
+
+			var catalogueField = GeoNetwork.util.SearchFormTools
+					.getCatalogueField(catalogue.services.getSources,
+							catalogue.services.logoUrl, true);
+			var groupField = GeoNetwork.util.SearchFormTools.getGroupField(
+					catalogue.services.getGroups, true);
+			var metadataTypeField = GeoNetwork.util.SearchFormTools
+					.getMetadataTypeField(true);
+			var validField = GeoNetwork.util.SearchFormTools
+					.getValidField(true);
+
+			advancedCriteria.push(themekeyField, orgNameField, categoryField,
+					spatialTypes, denominatorField, catalogueField, groupField,
+					metadataTypeField, validField);
+
+			var what = {
+				title : OpenLayers.i18n('What'),
+				margins : '0 5 0 0',
+				layout : 'form',
+				items : [
+						advancedCriteria,
+						GeoNetwork.util.SearchFormTools
+								.getTypesField(
+										GeoNetwork.searchDefault.activeMapControlExtent,
+										true) ]
+			};
+
+			// what.push(new GeoNetwork.form.OpenSearchSuggestionTextField({
+			// hideLabel : true,
+			// width : 285,
+			// minChars : 2,
+			// loadingText : '...',
+			// hideTrigger : true,
+			// url : catalogue.services.opensearchSuggest
+			// }));
 
 			var where = {};
 
