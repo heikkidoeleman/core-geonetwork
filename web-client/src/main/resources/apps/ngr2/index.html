@@ -1,77 +1,221 @@
-<!DOCTYPE html SYSTEM "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
 <head>
-    <title>GeoNetwork</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title></title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width">
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="icon" type="image/gif" href="../../images/logos/favicon.gif" />
-    <link href="../../srv/en/rss.latest?georss=gml" rel="alternate" type="application/rss+xml"
-          title="GeoNetwork opensource GeoRSS | Recent Changes"/>
-    <link href="../../srv/en/portal.opensearch" rel="search"
-          type="application/opensearchdescription+xml" title="GeoNetwork"/>
+<!-- CSS for Ext -->
+<link rel="stylesheet" type="text/css"
+	href="../js/ext/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css"
+	href="../js/ext/resources/css/xtheme-gray.css" />
+<link rel="stylesheet" type="text/css"
+	href="../js/ext-ux/Rating/rating.css" />
+<link rel="stylesheet" type="text/css"
+	href="../js/ext-ux/SuperBoxSelect/superboxselect.css" />
+<link rel="stylesheet" type="text/css"
+	href="../js/ext-ux/LightBox/lightbox.css" />
+<link rel="stylesheet" type="text/css"
+	href="../js/ext-ux/FileUploadField/file-upload.css" />
+<link rel="stylesheet" type="text/css"
+	href="../js/ext-ux/MultiselectItemSelector-3.0/Multiselect.css" />
 
 
-    <link rel="stylesheet" type="text/css" href="../js/ext/resources/css/ext-all.css"/>
-    <link rel="stylesheet" type="text/css" href="../js/ext/resources/css/xtheme-gray.css"/>
-    <link rel="stylesheet" type="text/css" href="../js/ext-ux/Rating/rating.css"/>
-    <link rel="stylesheet" type="text/css" href="../js/ext-ux/SuperBoxSelect/superboxselect.css" />
-    <link rel="stylesheet" type="text/css" href="../js/ext-ux/LightBox/lightbox.css"/>
-    <link rel="stylesheet" type="text/css" href="../js/ext-ux/FileUploadField/file-upload.css"/>
-    <link rel="stylesheet" type="text/css" href="../js/ext-ux/MultiselectItemSelector-3.0/Multiselect.css"/>
-    <link rel="stylesheet" type="text/css" href="css/gndefault.css"/>
-    <link rel="stylesheet" type="text/css" href="css/gnmapdefault.css"/>
-    <link rel="stylesheet" type="text/css" href="css/gnmetadatadefault.css"/>
-    <link rel="stylesheet" type="text/css" href="../js/GeoNetwork/resources/css/metadata-view.css"/>
+<link rel="stylesheet" href="css/normalize.min.css">
+<link rel="stylesheet" href="css/main.css">
 
-    <style>
 
-        body,p,td,li,th {font-family:arial;}
+<!--[if lt IE 7]>
+			<link rel="stylesheet" href="css/ltie7.css">
+		<![endif]-->
 
-        #actions li {
-            margin:.3em;
-        }
-        #actions li a {
-            color:#666688;
-            text-decoration:none;
-        }
-        .sb {
-            width:140px;height:24px;font-size:18px;color:#999999;
-        }
-        .cntLrg, .cntLrg td{
-            text-align:center;font-size:18px;
-        }
+<script src="js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+<script>
+	function hide(id) {
+		document.getElementById(id).style.display = 'none';
+	}
+	function show(id) {
+		document.getElementById(id).style.display = 'block';
+	}
+	function unFloat(id) {
+		document.getElementById(id).style.cssFloat = 'none';
+		document.getElementById(id).style.styleFloat = 'none';
+		document.getElementById(id).style.margin = '0px 20px 0px';
+		document.getElementById('legend-search').style.display = 'block';
+		document.getElementById('search-form-fieldset').style.border = '1px solid #fff';
+		document.getElementById('search-form-fieldset').style.padding = '20px';
+	}
+	function floatRight(id) {
+		document.getElementById(id).style.cssFloat = 'right';
+		document.getElementById(id).style.styleFloat = 'right';
+		document.getElementById(id).style.margin = '5px 20px 0px';
+		document.getElementById('legend-search').style.display = 'none';
+		document.getElementById('search-form-fieldset').style.border = 'none';
+		document.getElementById('search-form-fieldset').style.padding = '0px';
+	}
+</script>
 
-        #GNtabs .x-tab-right {padding-left:12px !important}
-        #GNtabs .x-tab-left{padding-right:12px !important}
-        #GNtabs .x-tab-strip-text{font-size:14px  !important;padding:6px 0 !important}
-    </style>
+
 </head>
 <body>
-<div id="loading-mask"></div>
-<div id="loading">
-    <div class="loading-indicator">Loading ...</div>
-</div>
+	<div id="container">
+		<!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
 
-<div id="header">
-    <div id="title" class="mn-main"> </div>
-</div>
-<div id="mn-top">
-    <div class="pipe"><a href="javascript:void(app.getHelpWindow().show());">Help</a></div>
-    <div class="pipe" id="lang-form"></div>
-    <div class="pipe" id="login-form"></div>
-        </div>
+		<div id="header">
+			<header class="wrapper clearfix">
+				<div style="width: 80%; margin: 0 auto;">
+					<div id="search-form">
+						<fieldset id="search-form-fieldset">
+							<legend id="legend-search">zoeken</legend>
+							<input type="text" id="freetext-input" /> <input type="submit"
+								id="search-submit" class="form-submit" value="zoeken" />
+							<div id="show-advanced"
+								onclick="hide('show-advanced');unFloat('search-form');show('advanced-search-options');if(Ext.getCmp('advanced-search-options-content-form'))Ext.getCmp('advanced-search-options-content-form').doLayout();">
+								toon geavanceerde opties</div>
+							<div id="advanced-search-options">
+								<div id="hide-advanced"
+									onclick="hide('advanced-search-options');floatRight('search-form');show('show-advanced');">
+									verberg geavanceerde opties</div>
+								<div id="advanced-search-options-content"></div>
+							</div>
+						</fieldset>
+					</div>
 
-<div id="tag"></div>
+					<nav id="nav">
+						<ul id="main-navigation">
+							<li><a href="#">nieuws</a></li>
+							<li><a href="#">catalogus</a></li>
+							<li><a href="#">contact</a></li>
+							<li><a href="#">over deze site</a></li>
+						</ul>
+					</nav>
 
-<div id="shortcut" style="display:none;"></div>
+					<ul id="main-buttons">
+						<li><a href="#feedback_main" id="feedback_main"><img
+								class="menu_icon" alt="feedback"
+								src="img/1349859629_google-buzz.png" /></a></li>
+						<li><a href="#permalink" id="permalink"><img
+								class="menu_icon" alt="permalink"
+								src="img/1349859708_google-wave.png" /></a></li>
+						<li><a href="#print" id="print"><img class="menu_icon"
+								alt="print" src="img/1349859757_paypal.png" /></a></li>
+						<li><a href="#share" id="share"><img class="menu_icon"
+								alt="share" src="img/1349859610_dzone.png" /></a></li>
+						<li><a href="#user_menu" id="user_menu"><img
+								class="menu_icon" alt="user menu" src="img/1349859721_buddy.png" /></a></li>
+					</ul>
+				</div>
+			</header>
+		</div>
 
-    <script type="text/javascript" src="../js/ext/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="../js/ext/ext-all.js"></script>
-    <script type="text/javascript" src="js/App-mini.js"></script>
+		<div id="main">
+			<div class="main wrapper clearfix">
 
-<!--<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-<script type="text/javascript">
-    google.load("language", "1");
-</script>-->
+				<aside id="main-aside">
+					<header>Filter</header>
+					<ul>
+						<li>Filter 1</li>
+						<li>Filter 2</li>
+						<li>Filter 3</li>
+						<li>Filter 4</li>
+					</ul>
+					<header>Filter</header>
+					<ul>
+						<li>Filter 1</li>
+						<li>Filter 2</li>
+						<li>Filter 3</li>
+						<li>Filter 4</li>
+					</ul>
+				</aside>
+
+				<article>
+					<aside id="secondary-aside">
+						<div id="mini-map"></div>
+					</aside>
+					<header> </header>
+					<section>
+						<div id="result-panel"></div>
+					</section>
+
+					<footer> </footer>
+				</article>
+			</div>
+			<!-- .main .wrapper .clearfix -->
+		</div>
+		<!-- #main -->
+
+		<div id="footer">
+			<footer class="wrapper">
+				<ul>
+					<li>Copyright</li>
+					<li>Privacy</li>
+					<li>Cookies</li>
+					<li>Toegankelijkheid</li>
+					<li>Open Data
+					<li />
+				</ul>
+			</footer>
+		</div>
+
+		<script src="js/main.js"></script>
+
+		<script>
+			var _gaq = [ [ '_setAccount', 'UA-XXXXX-X' ], [ '_trackPageview' ] ];
+			(function(d, t) {
+				var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+				g.src = ('https:' == location.protocol ? '//ssl' : '//www')
+						+ '.google-analytics.com/ga.js';
+				s.parentNode.insertBefore(g, s)
+			}(document, 'script'));
+		</script>
+	</div>
+
+	<!-- Scripts for Faceted Search -->
+	<script type="text/javascript" src="../js/ext/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="../js/ext/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../js/ext-ux/Rating/RatingItem.js"></script>
+	<script type="text/javascript"
+		src="../js/ext-ux/FileUploadField/FileUploadField.js"></script>
+	<script type="text/javascript"
+		src="../js/ext-ux/TwinTriggerComboBox/TwinTriggerComboBox.js"></script>
+	<script type="text/javascript" src="../js/ext-ux/DateTime/DateTime.js"></script>
+	<script type="text/javascript"
+		src="../js/ext-ux/RowExpander/RowExpander.js"></script>
+	<script type="text/javascript"
+		src="../js/ext-ux/MultiselectItemSelector-3.0/DDView.js"></script>
+	<script type="text/javascript"
+		src="../js/ext-ux/MultiselectItemSelector-3.0/Multiselect.js"></script>
+	<script type="text/javascript"
+		src="../js/ext-ux/SuperBoxSelect/SuperBoxSelect.js"></script>
+	<script type="text/javascript" src="../js/ext-ux/LightBox/lightbox.js"></script>
+
+
+
+	<script type="text/javascript" src="../js/proj4js-compressed.js"></script>
+	<script type="text/javascript" src="../js/OpenLayers/lib/OpenLayers.js"></script>
+	<script type="text/javascript"
+		src="../js/GeoExt/lib/overrides/override-ext-ajax.js"></script>
+	<script type="text/javascript" src="../js/GeoExt/lib/GeoExt.js"></script>
+	<script type="text/javascript"
+		src="../js/GeoExt-ux/LayerOpacitySliderPlugin/LayerOpacitySliderPlugin.js"></script>
+
+	<script type="text/javascript" src="../js/GeoNetwork/lib/GeoNetwork.js"></script>
+
+	<script type="text/javascript" src="js/Settings.js"></script>
+	<script type="text/javascript" src="js/Shortcuts.js"></script>
+	<script type="text/javascript" src="js/map/Settings.js"></script>
+	<script type="text/javascript" src="js/map/MapApp.js"></script>
+	<script type="text/javascript" src="js/App.js"></script>
+
 </body>
 </html>
