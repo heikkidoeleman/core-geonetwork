@@ -286,6 +286,7 @@ GeoNetwork.app = function() {
 							.search('advanced-search-options-content-form',
 									this.loadResults, null,
 									catalogue.startRecord, true);
+					Ext.getCmp('resultsPanel').show();
 				},
 				forceLayout : true,
 				padding : 5,
@@ -409,6 +410,7 @@ GeoNetwork.app = function() {
 };
 
 Ext.onReady(function() {
+	
 	var lang = /hl=([a-z]{3})/.exec(location.href);
 	GeoNetwork.Util.setLang(lang && lang[1], '..');
 

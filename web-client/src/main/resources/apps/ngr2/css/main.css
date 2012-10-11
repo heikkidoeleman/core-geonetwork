@@ -198,8 +198,12 @@ div#advSearchTabs div.x-panel-bwrap div.x-panel-body.x-panel-body-noheader.x-pan
 	background: white;
 }
 
-div.x-panel-header {
+div#resultsPanel div.x-panel-bwrap {
 	border-top: 10px solid #007BC7;
+}
+div#resultsPanel table.x-toolbar-ct, div#resultsPanel button{
+	background-color: #174375;
+	color: white;
 }
 
 div#advSearchTabs div.x-panel-body,form.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-form,#advSearchTabs
@@ -216,9 +220,8 @@ div#advSearchTabs ul {
 	margin: 0 0 0 0;
 }
 
-
 div#advSearchTabs input {
-	border:none;
+	border: none;
 }
 
 /* ==========================================================================
