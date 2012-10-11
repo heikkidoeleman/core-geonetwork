@@ -56,4 +56,21 @@ GeoNetwork.WMSList = [['Geoserver', 'http://localhost/geoserver/wms?']];
 
 GeoNetwork.defaultViewMode = 'view-simple';
 
-Ext.BLANK_IMAGE_URL = '../js/ext/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = '../js/ext/resources/images/default/s.gif'
+
+GeoNetwork.Settings.results = {
+        // Parameters to set bounding box highlighter colors
+        // Use a custom single color for bounding box
+        featurecolor: 'orange',
+        // Use a random color map with 2 colors
+        //colormap: GeoNetwork.Util.generateColorMap(2),
+        // Use a default color map with 10 colors
+        //colormap: GeoNetwork.Util.defaultColorMap,
+        // Use a custom color map
+        //colormap: ['red', 'green', 'blue'],
+        colormap: undefined,
+        // Use a custom CSS rules
+        //featurecolorCSS: "border-width: 5px;border-style: solid; border-color: ${featurecolor}"
+        featurecolorCSS: undefined
+};
+
