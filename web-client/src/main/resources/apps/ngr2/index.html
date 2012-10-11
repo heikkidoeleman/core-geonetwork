@@ -80,7 +80,7 @@
 							<input type="text" id="freetext-input" /> <input type="submit"
 								id="search-submit" class="form-submit" value="zoeken" />
 							<div id="show-advanced"
-								onclick="hide('show-advanced');unFloat('search-form');show('advanced-search-options');">
+								onclick="hide('show-advanced');unFloat('search-form');show('advanced-search-options');if(Ext.getCmp('advanced-search-options-content-form'))Ext.getCmp('advanced-search-options-content-form').doLayout();">
 								toon geavanceerde opties</div>
 							<div id="advanced-search-options">
 								<div id="hide-advanced"

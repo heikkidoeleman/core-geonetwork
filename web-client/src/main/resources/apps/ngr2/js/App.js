@@ -3,11 +3,55 @@ Ext.namespace('GeoNetwork');
 var catalogue;
 var app;
 var cookie;
+var metadataResultsPanel;
 
 GeoNetwork.app = function() {
 
 	// public space:
 	return {
+	    /**
+	     * Results panel layout with top, bottom bar and DataView
+	     *
+	     * @return
+	     */
+	    createResultsPanel: function(permalinkProvider){
+	        metadataResultsView = new GeoNetwork.MetadataResultsView({
+	            catalogue: catalogue,
+	            displaySerieMembers: true,
+	            autoScroll: true,
+	            tpl: GeoNetwork.Templates.FULL,
+	            featurecolor: GeoNetwork.Settings.results.featurecolor,
+	            colormap: GeoNetwork.Settings.results.colormap,
+	            featurecolorCSS: GeoNetwork.Settings.results.featurecolorCSS
+	        });
+	        
+	        catalogue.resultsView = metadataResultsView;
+	        
+	        tBar = new GeoNetwork.MetadataResultsToolbar({
+	            catalogue: catalogue,
+	            searchFormCmp: Ext.getCmp('searchForm'),
+	            sortByCmp: Ext.getCmp('E_sortBy'),
+	            metadataResultsView: metadataResultsView,
+	            permalinkProvider: permalinkProvider
+	        });
+	        
+	        bBar = createBBar();
+	        
+	        resultPanel = new Ext.Panel({
+	            id: 'resultsPanel',
+	            border: false,
+	            hidden: true,
+	            bodyCssClass: 'md-view',
+	            autoWidth: true,
+	            layout: 'fit',
+	            tbar: tBar,
+	            items: metadataResultsView,
+	            // paging bar on the bottom
+	            bbar: bBar
+	        });
+	        return resultPanel;
+	    },
+		
 		generateAdvancedSearchForm : function() {
 
 			var advancedCriteria = [];
@@ -96,6 +140,7 @@ GeoNetwork.app = function() {
 				title : OpenLayers.i18n('What'),
 				margins : '0 5 0 0',
 				layout : 'form',
+				forceLayout: true,
 				items : [
 						advancedCriteria,
 						GeoNetwork.util.SearchFormTools
@@ -131,15 +176,19 @@ GeoNetwork.app = function() {
 			var when = {
 				title : OpenLayers.i18n('When'),
 				margins : '0 5 0 5',
+				forceLayout: true,
 				defaultType : 'datefield',
 				layout : 'form',
 				items : GeoNetwork.util.SearchFormTools.getWhen()
 			};
 			var inspire = {
 				title : 'INSPIRE',
-				margins : '0 5 0 5',
+				margins : '5 5 5 5',
 				defaultType : 'datefield',
 				layout : 'form',
+			    defaults: {
+			        anchor: '100%'
+			    },
 				items : GeoNetwork.util.INSPIRESearchFormTools
 						.getINSPIREFields(catalogue.services, true)
 			};
@@ -154,7 +203,7 @@ GeoNetwork.app = function() {
 					align : 'center'
 				},
 				plain : true,
-				autoHeight : true,
+				forceLayout : true,
 				border : false,
 				deferredRender : false,
 				defaults : {
@@ -164,12 +213,25 @@ GeoNetwork.app = function() {
 			});
 
 			return new GeoNetwork.SearchFormPanel({
-				id : 'searchForm',
+				id : 'advanced-search-options-content-form',
 				renderTo : 'advanced-search-options-content',
 				stateId : 's',
 				border : false,
-				searchCb : function() { // TODO
+				searchCb : function() { 
+	                if (metadataResultsView && Ext.getCmp('geometryMap')) {
+	                    metadataResultsView.addMap(Ext.getCmp('mini-map').map, true);
+	                 }
+	                 var any = Ext.get('E_any');
+	                 if (any) {
+	                     if (any.getValue() === OpenLayers.i18n('fullTextSearch')) {
+	                         any.setValue('');
+	                     }
+	                 }
+	                 
+	                 catalogue.startRecord = 1; // Reset start record
+	                 search();
 				},
+				forceLayout: true,
 				padding : 5,
 				items : formItems
 			});

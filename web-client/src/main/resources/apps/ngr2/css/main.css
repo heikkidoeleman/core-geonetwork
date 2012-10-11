@@ -193,6 +193,34 @@ aside#main-aside ul {
 	color: white;
 }
 
+div#advSearchTabs div.x-panel-bwrap div.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-box-layout-ct div.x-box-inner div.x-panel.x-form-label-left.x-box-item div.x-panel-bwrap div.x-panel-body
+	{
+	background: white;
+}
+
+div.x-panel-header {
+	border-top: 10px solid #007BC7;
+}
+
+div#advSearchTabs div.x-panel-body,form.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-form,#advSearchTabs
+	{
+	background: #174375;
+}
+
+div#advSearchTabs div.x-panel.x-form-label-left.x-box-item {
+	width: 25%;
+}
+
+div#advSearchTabs ul {
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+}
+
+
+div#advSearchTabs input {
+	border:none;
+}
+
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
