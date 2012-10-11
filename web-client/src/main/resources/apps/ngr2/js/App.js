@@ -3,55 +3,106 @@ Ext.namespace('GeoNetwork');
 var catalogue;
 var app;
 var cookie;
-var metadataResultsPanel;
 
 GeoNetwork.app = function() {
-
 	// public space:
 	return {
-	    /**
-	     * Results panel layout with top, bottom bar and DataView
-	     *
-	     * @return
-	     */
-	    createResultsPanel: function(permalinkProvider){
-	        metadataResultsView = new GeoNetwork.MetadataResultsView({
-	            catalogue: catalogue,
-	            displaySerieMembers: true,
-	            autoScroll: true,
-	            tpl: GeoNetwork.Templates.FULL,
-	            featurecolor: GeoNetwork.Settings.results.featurecolor,
-	            colormap: GeoNetwork.Settings.results.colormap,
-	            featurecolorCSS: GeoNetwork.Settings.results.featurecolorCSS
-	        });
-	        
-	        catalogue.resultsView = metadataResultsView;
-	        
-	        tBar = new GeoNetwork.MetadataResultsToolbar({
-	            catalogue: catalogue,
-	            searchFormCmp: Ext.getCmp('searchForm'),
-	            sortByCmp: Ext.getCmp('E_sortBy'),
-	            metadataResultsView: metadataResultsView,
-	            permalinkProvider: permalinkProvider
-	        });
-	        
-	        bBar = createBBar();
-	        
-	        resultPanel = new Ext.Panel({
-	            id: 'resultsPanel',
-	            border: false,
-	            hidden: true,
-	            bodyCssClass: 'md-view',
-	            autoWidth: true,
-	            layout: 'fit',
-	            tbar: tBar,
-	            items: metadataResultsView,
-	            // paging bar on the bottom
-	            bbar: bBar
-	        });
-	        return resultPanel;
-	    },
-		
+
+		maps : [],
+		/**
+		 * Bottom bar
+		 * 
+		 * @return
+		 */
+		createBBar : function() {
+
+			var previousAction = new Ext.Action({
+				id : 'previousBt',
+				text : '&lt;&lt;',
+				handler : function() {
+					var from = catalogue.startRecord
+							- parseInt(Ext.getCmp('E_hitsperpage').getValue(),
+									10);
+					if (from > 0) {
+						catalogue.startRecord = from;
+						search();
+					}
+				},
+				scope : this
+			});
+
+			var nextAction = new Ext.Action({
+				id : 'nextBt',
+				text : '&gt;&gt;',
+				handler : function() {
+					catalogue.startRecord += parseInt(Ext.getCmp(
+							'E_hitsperpage').getValue(), 10);
+					search();
+				},
+				scope : this
+			});
+
+			return new Ext.Toolbar({
+				items : [ previousAction, '|', nextAction, '|', {
+					xtype : 'tbtext',
+					text : '',
+					id : 'info'
+				} ]
+			});
+
+		},
+
+		/**
+		 * Results panel layout with top, bottom bar and DataView
+		 * 
+		 * @return
+		 */
+		createResultsPanel : function(permalinkProvider) {
+			var metadataResultsView = new GeoNetwork.MetadataResultsView({
+				catalogue : catalogue,
+				displaySerieMembers : true,
+				autoScroll : true,
+				tpl : GeoNetwork.Templates.FULL,
+				featurecolor : GeoNetwork.Settings.results.featurecolor,
+				colormap : GeoNetwork.Settings.results.colormap,
+				featurecolorCSS : GeoNetwork.Settings.results.featurecolorCSS
+			});
+
+			catalogue.resultsView = metadataResultsView;
+
+			// set a permalink provider which will be the main state provider.
+			var permalinkProvider = new GeoExt.state.PermalinkProvider({
+				encodeType : false
+			});
+
+			Ext.state.Manager.setProvider(permalinkProvider);
+
+			var tBar = new GeoNetwork.MetadataResultsToolbar({
+				catalogue : catalogue,
+				searchFormCmp : Ext.getCmp('searchForm'),
+				sortByCmp : Ext.getCmp('E_sortBy'),
+				metadataResultsView : metadataResultsView,
+				permalinkProvider : permalinkProvider
+			});
+
+			var bBar = this.createBBar();
+
+			var resultPanel = new Ext.Panel({
+				id : 'resultsPanel',
+				border : false,
+				hidden : true,
+				bodyCssClass : 'md-view',
+				autoWidth : true,
+				layout : 'fit',
+				tbar : tBar,
+				items : metadataResultsView,
+				renderTo : 'result-panel',
+				// paging bar on the bottom
+				bbar : bBar
+			});
+			return resultPanel;
+		},
+
 		generateAdvancedSearchForm : function() {
 
 			var advancedCriteria = [];
@@ -140,7 +191,7 @@ GeoNetwork.app = function() {
 				title : OpenLayers.i18n('What'),
 				margins : '0 5 0 0',
 				layout : 'form',
-				forceLayout: true,
+				forceLayout : true,
 				items : [
 						advancedCriteria,
 						GeoNetwork.util.SearchFormTools
@@ -176,7 +227,7 @@ GeoNetwork.app = function() {
 			var when = {
 				title : OpenLayers.i18n('When'),
 				margins : '0 5 0 5',
-				forceLayout: true,
+				forceLayout : true,
 				defaultType : 'datefield',
 				layout : 'form',
 				items : GeoNetwork.util.SearchFormTools.getWhen()
@@ -186,9 +237,9 @@ GeoNetwork.app = function() {
 				margins : '5 5 5 5',
 				defaultType : 'datefield',
 				layout : 'form',
-			    defaults: {
-			        anchor: '100%'
-			    },
+				defaults : {
+					anchor : '100%'
+				},
 				items : GeoNetwork.util.INSPIRESearchFormTools
 						.getINSPIREFields(catalogue.services, true)
 			};
@@ -217,34 +268,84 @@ GeoNetwork.app = function() {
 				renderTo : 'advanced-search-options-content',
 				stateId : 's',
 				border : false,
-				searchCb : function() { 
-	                if (metadataResultsView && Ext.getCmp('geometryMap')) {
-	                    metadataResultsView.addMap(Ext.getCmp('mini-map').map, true);
-	                 }
-	                 var any = Ext.get('E_any');
-	                 if (any) {
-	                     if (any.getValue() === OpenLayers.i18n('fullTextSearch')) {
-	                         any.setValue('');
-	                     }
-	                 }
-	                 
-	                 catalogue.startRecord = 1; // Reset start record
-	                 search();
+				searchCb : function() {
+					if (catalogue.resultsView && app.maps.length > 0) {
+						catalogue.resultsView.addMap(app.maps[0], true);
+					}
+					var any = Ext.get('E_any');
+					if (any) {
+						if (any.getValue() === OpenLayers
+								.i18n('fullTextSearch')) {
+							any.setValue('');
+						}
+					}
+
+					catalogue.startRecord = 1; // Reset start record
+					searching = true;
+					catalogue
+							.search('advanced-search-options-content-form',
+									this.loadResults, null,
+									catalogue.startRecord, true);
 				},
-				forceLayout: true,
+				forceLayout : true,
 				padding : 5,
 				items : formItems
 			});
 		},
+		loadResults : function(response) {
+			// Show "List results" panel
+
+			Ext.getCmp('previousBt').setDisabled(catalogue.startRecord === 1);
+			Ext.getCmp('nextBt').setDisabled(
+					catalogue.startRecord
+							+ parseInt(Ext.getCmp('E_hitsperpage').getValue(),
+									10) > catalogue.metadataStore.totalLength);
+			if (Ext.getCmp('E_sortBy').getValue()) {
+				Ext.getCmp('sortByToolBar').setValue(
+						Ext.getCmp('E_sortBy').getValue() + "#"
+								+ Ext.getCmp('sortOrder').getValue());
+
+			} else {
+				Ext.getCmp('sortByToolBar').setValue(
+						Ext.getCmp('E_sortBy').getValue());
+
+			}
+
+			// Fix for width sortBy combo in toolbar
+			// See this:
+			// http://www.sencha.com/forum/showthread.php?122454-TabPanel-deferred-render-false-nested-toolbar-layout-problem
+			Ext.getCmp('sortByToolBar').syncSize();
+			Ext.getCmp('sortByToolBar').setWidth(130);
+
+			resultsPanel.syncSize();
+
+			// resultsPanel.setHeight(Ext.getCmp('center').getHeight());
+
+			// Ext.getCmp('west').syncSize();
+			// Ext.getCmp('center').syncSize();
+			// Ext.ux.Lightbox.register('a[rel^=lightbox]');
+		},
 		generateMaps : function() {
 
 			var map = new OpenLayers.Map();
-			var layer = new OpenLayers.Layer.WMS("Global Imagery",
-					"http://maps.opengeo.org/geowebcache/service/wms", {
-						layers : "bluemarble"
-					});
-			map.addLayer(layer);
 
+			var baseOSM = new OpenLayers.Layer.OSM(
+					"MapQuest-OSM Tiles",
+					[
+							"http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
+							"http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
+							"http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
+							"http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg" ]);
+			var baseAerial = new OpenLayers.Layer.OSM(
+					"MapQuest Open Aerial Tiles",
+					[
+							"http://oatile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
+							"http://oatile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
+							"http://oatile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
+							"http://oatile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg" ]);
+
+			map.addLayer(baseOSM);
+			map.addLayer(baseAerial);
 			new GeoExt.MapPanel({
 				renderTo : 'mini-map',
 				height : 200,
@@ -252,6 +353,8 @@ GeoNetwork.app = function() {
 				map : map,
 				title : 'Mini Map'
 			});
+
+			this.maps.push(map);
 
 		},
 		init : function() {
@@ -300,6 +403,7 @@ GeoNetwork.app = function() {
 
 			this.generateMaps();
 			this.generateAdvancedSearchForm();
+			this.createResultsPanel();
 		}
 	};
 };
