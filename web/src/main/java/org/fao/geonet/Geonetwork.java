@@ -33,6 +33,9 @@ import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContext;
 
@@ -46,6 +49,7 @@ import jeeves.resources.dbms.Dbms;
 import jeeves.server.ConfigurationOverrides;
 import jeeves.server.ServiceConfig;
 import jeeves.server.context.ServiceContext;
+import jeeves.server.resources.ResourceManager;
 import jeeves.utils.ProxyInfo;
 import jeeves.utils.Util;
 import jeeves.utils.Xml;
@@ -404,14 +408,6 @@ public class Geonetwork implements ApplicationHandler {
 
 		GeonetContext gnContext = new GeonetContext();
 
-        gnContext.readOnly = Boolean.parseBoolean(handlerConfig.getValue(Geonet.Config.READONLY_MODE, "false"));
-        if(gnContext.readOnly) {
-            logger.info("GeoNetwork is running in READ-ONLY mode");
-        }
-        else {
-            logger.info("GeoNetwork is NOT running in READ-ONLY mode");
-        }
-
 		gnContext.accessMan   = accessMan;
 		gnContext.dataMan     = dataMan;
 		gnContext.searchMan   = searchMan;
@@ -419,7 +415,6 @@ public class Geonetwork implements ApplicationHandler {
 		gnContext.config      = handlerConfig;
 		gnContext.catalogDis  = catalogDis;
 		gnContext.settingMan  = settingMan;
-		gnContext.harvestMan  = harvestMan;
 		gnContext.thesaurusMan= thesaurusMan;
 		gnContext.oaipmhDis   = oaipmhDis;
 		gnContext.app_context = app_context;
@@ -438,6 +433,9 @@ public class Geonetwork implements ApplicationHandler {
 
         harvestMan = new HarvestManager(context, gnContext, settingMan, dataMan);
         dataMan.setHarvestManager(harvestMan);
+
+        gnContext.harvestMan  = harvestMan;
+
 
         // Creates a default site logo, only if the logo image doesn't exists
         // This can happen if the application has been updated with a new version preserving the database and
@@ -462,8 +460,88 @@ public class Geonetwork implements ApplicationHandler {
 			pi.setProxyInfo(proxyHost, new Integer(proxyPort), username, password);
 		}
 
+        createDBHeartBeat(context.getResourceManager(), gnContext);
+
 		return gnContext;
 	}
+
+    /**
+     * Sets up a periodic check whether GeoNetwork can successfully write to the database. If it can't, GeoNetwork will
+     * automatically switch to read-only mode.
+     */
+    private void createDBHeartBeat(final ResourceManager rm, final GeonetContext gnContext) {
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        Runnable DBHeartBeat = new Runnable() {
+            /**
+             *
+             */
+            public void run() {
+                try {
+                    boolean readOnly = gnContext.isReadOnly();
+                    logger.info("DBHeartBeat: GN is read-only ? " + readOnly);
+                    boolean canWrite = checkDBWrite();
+                    if(readOnly && canWrite) {
+                        logger.warning("GeoNetwork can write to the database, switching to read-write mode");
+                        readOnly = false;
+                        gnContext.setReadOnly(readOnly);
+                        gnContext.getHarvestManager().setReadOnly(readOnly);
+                    }
+                    else if(!readOnly && !canWrite) {
+                        logger.warning("GeoNetwork can not write to the database, switching to read-only mode");
+                        readOnly = true;
+                        gnContext.setReadOnly(readOnly);
+                        gnContext.getHarvestManager().setReadOnly(readOnly);
+                    }
+                    else {
+                        if(readOnly) {
+                            logger.warning("GeoNetwork remains in read-only mode");
+                        }
+                        else {
+                            logger.warning("GeoNetwork remains in read-write mode");
+                        }
+                    }
+                }
+                // any uncaught exception would cause the scheduled execution to silently stop
+                catch(Throwable x) {
+                    logger.error("DBHeartBeat error: " + x.getMessage() + " This error is ignored.");
+                    x.printStackTrace();
+                }
+            }
+
+            /**
+             *
+             * @return
+             */
+            private boolean checkDBWrite() {
+                Dbms dbms = null;
+                try {
+                    Integer testId = new Integer("100000");
+                    String insert = "INSERT INTO Settings(id, parentId, name, value) VALUES(?, ?, ?, ?)";
+                    dbms = (Dbms) rm.openDirect(Geonet.Res.MAIN_DB);
+                    dbms.execute(insert, testId, new Integer("1"), "DBHeartBeat", "Yeah !");
+                    String remove = "DELETE FROM Settings WHERE id=?";
+                    dbms.execute(remove, testId);
+                    System.out.println("PING SUCCESS!");
+                    return true;
+                }
+                catch (Exception x) {
+                    logger.error("DBHeartBeat SQLException: " + x.getMessage());
+                    x.printStackTrace();
+                    return false;
+                }
+                finally {
+                    try {
+                        if (dbms != null) rm.close(Geonet.Res.MAIN_DB, dbms);
+                    }
+                    catch (Exception x) {
+                        logger.error("DBHeartBeat failed to close DB connection. Your system is unstable! Error: " + x.getMessage());
+                        x.printStackTrace();
+                    }
+                }
+            }
+        };
+        scheduledExecutorService.scheduleWithFixedDelay(DBHeartBeat, 120, 30, TimeUnit.SECONDS);
+    }
 
     /**
      *

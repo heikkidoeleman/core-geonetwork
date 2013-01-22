@@ -387,7 +387,16 @@ public class HarvestManager
 		hmHarvesters.get(id).addInfo(node);
 	}
 
-	//---------------------------------------------------------------------------
+    public boolean isReadOnly() {
+        System.out.println("HarvestManager: readOnly is " + readOnly);
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        System.out.println("HarvestManager setting readOnly to " + readOnly);
+        this.readOnly = readOnly;
+    }
+//---------------------------------------------------------------------------
 	//---
 	//--- Vars
 	//---

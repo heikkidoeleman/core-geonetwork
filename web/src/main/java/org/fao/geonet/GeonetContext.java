@@ -56,7 +56,7 @@ public class GeonetContext {
   /* package */ MetadataNotifierManager metadataNotifierMan;
 	/* package */ ThreadPool        threadPool;
 	Class statusActionsClass;
-    boolean readOnly;
+    boolean readOnly = false;
 
 
     //---------------------------------------------------------------------------
@@ -86,5 +86,8 @@ public class GeonetContext {
 	public Class getStatusActionsClass() { return statusActionsClass; }
     public boolean isReadOnly() {
         return readOnly;
+    }
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 }
