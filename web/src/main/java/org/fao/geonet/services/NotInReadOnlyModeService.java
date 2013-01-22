@@ -4,6 +4,7 @@ import jeeves.interfaces.Service;
 import jeeves.server.ServiceConfig;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Log;
+import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.jdom.Element;
 
@@ -18,11 +19,13 @@ public abstract class NotInReadOnlyModeService implements Service{
     @Override
     public Element exec(Element params, ServiceContext context) throws Exception {
         // READONLYMODE
-        if(false) {
+        GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
+        if(!gc.isReadOnly()) {
             return serviceSpecificExec(params, context);
         }
         else {
             Log.debug(Geonet.DATA_MANAGER, "GeoNetwork is operating in read-only mode. Service execution skipped.");
+            System.out.println("GeoNetwork is operating in read-only mode. Service execution skipped.");
             return null;
         }
     }

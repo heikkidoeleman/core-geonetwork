@@ -1343,8 +1343,8 @@ public class DataManager {
      */
 	public void increasePopularity(ServiceContext srvContext, String id) throws Exception {
         // READONLYMODE
-        if(false) {
-		    GeonetContext gc = (GeonetContext) srvContext.getHandlerContext(Geonet.CONTEXT_NAME);
+        GeonetContext gc = (GeonetContext) srvContext.getHandlerContext(Geonet.CONTEXT_NAME);
+        if(!gc.isReadOnly()) {
 		    gc.getThreadPool().runTask(new IncreasePopularityTask(srvContext, id));
         }
         else {
@@ -1365,8 +1365,6 @@ public class DataManager {
      * @throws Exception hmm
      */
 	public int rateMetadata(Dbms dbms, int id, String ipAddress, int rating) throws Exception {
-        // READONLYMODE
-        if(false) {
             //
             // update rating on the database
             //
@@ -1399,13 +1397,6 @@ public class DataManager {
             indexInThreadPoolIfPossible(dbms,Integer.toString(id));
 
             return rating;
-        }
-        else {
-            if(Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
-                Log.debug(Geonet.DATA_MANAGER, "GeoNetwork is operating in read-only mode. Rating update is skipped.");
-            }
-            return rating;
-        }
 	}
 
 	//--------------------------------------------------------------------------

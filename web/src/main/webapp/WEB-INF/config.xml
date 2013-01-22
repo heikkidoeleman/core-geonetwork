@@ -363,8 +363,8 @@
 		<param name="maxWritesInTransaction" value="1" />
 
 		<param name="useSubversion" value="true"/>
-
-		<param name="statusActionsClass" value="org.fao.geonet.services.metadata.DefaultStatusActions"/>
+        <param name="readonlyMode" value="true"/>
+        <param name="statusActionsClass" value="org.fao.geonet.services.metadata.DefaultStatusActions"/>
 	</appHandler>
 
 	<!-- ====================================================================== -->

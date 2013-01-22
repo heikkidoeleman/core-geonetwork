@@ -114,8 +114,7 @@ public class Geonetwork implements ApplicationHandler {
 	private ThreadPool        threadPool;
 	private String   FS         = File.separator;
 	private Element dbConfiguration;
-
-	private static final String       SPATIAL_INDEX_FILENAME    = "spatialindex";
+    private static final String       SPATIAL_INDEX_FILENAME    = "spatialindex";
 	private static final String       IDS_ATTRIBUTE_NAME        = "id";
 
 	//---------------------------------------------------------------------------
@@ -379,14 +378,6 @@ public class Geonetwork implements ApplicationHandler {
 		thesaurusMan = ThesaurusManager.getInstance(context, path, dataMan, context.getResourceManager(), thesauriDir);
 
 		//------------------------------------------------------------------------
-		//--- initialize harvesting subsystem
-
-		logger.info("  - Harvest manager...");
-
-		harvestMan = new HarvestManager(context, settingMan, dataMan);
-		dataMan.setHarvestManager(harvestMan);
-
-		//------------------------------------------------------------------------
 		//--- initialize catalogue services for the web
 
 		logger.info("  - Catalogue services for the web...");
@@ -413,6 +404,14 @@ public class Geonetwork implements ApplicationHandler {
 
 		GeonetContext gnContext = new GeonetContext();
 
+        gnContext.readOnly = Boolean.parseBoolean(handlerConfig.getValue(Geonet.Config.READONLY_MODE, "false"));
+        if(gnContext.readOnly) {
+            logger.info("GeoNetwork is running in READ-ONLY mode");
+        }
+        else {
+            logger.info("GeoNetwork is NOT running in READ-ONLY mode");
+        }
+
 		gnContext.accessMan   = accessMan;
 		gnContext.dataMan     = dataMan;
 		gnContext.searchMan   = searchMan;
@@ -431,6 +430,14 @@ public class Geonetwork implements ApplicationHandler {
 		gnContext.statusActionsClass = statusActionsClass;
 
 		logger.info("Site ID is : " + gnContext.getSiteId());
+
+        //------------------------------------------------------------------------
+        //--- initialize harvesting subsystem
+
+        logger.info("  - Harvest manager...");
+
+        harvestMan = new HarvestManager(context, gnContext, settingMan, dataMan);
+        dataMan.setHarvestManager(harvestMan);
 
         // Creates a default site logo, only if the logo image doesn't exists
         // This can happen if the application has been updated with a new version preserving the database and
@@ -859,5 +866,4 @@ public class Geonetwork implements ApplicationHandler {
 		logger.info("NOTE: Using shapefile for spatial index, this can be slow for larger catalogs");
 		return ids;
 	}
-
 }

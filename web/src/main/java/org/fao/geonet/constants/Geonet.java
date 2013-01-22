@@ -495,7 +495,8 @@ public class Geonet {
 		public static final String RESOURCES_DIR = "resources";
 		public static final String SYSTEM_DATA_DIR = "geonetworkDataDir";
 		public static final String HIDE_WITHHELD_ELEMENTS = "hidewithheldelements";
-	}
+        public static final String READONLY_MODE = "readonlyMode";
+    }
 
     /**
      * Container for element values.
