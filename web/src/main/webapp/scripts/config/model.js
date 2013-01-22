@@ -34,6 +34,7 @@ ConfigModel.prototype.getConfig_OK = function(node)
             SERVER_PROTOCOL   : xml.evalXPath(node, 'server/protocol'),
 			SERVER_HOST       : xml.evalXPath(node, 'server/host'),
 			SERVER_PORT       : xml.evalXPath(node, 'server/port'),
+			SERVER_SECURE_PORT       : xml.evalXPath(node, 'server/securePort'),
 			INTRANET_NETWORK  : xml.evalXPath(node, 'intranet/network'),
 			INTRANET_NETMASK  : xml.evalXPath(node, 'intranet/netmask'),
 
@@ -57,13 +58,14 @@ ConfigModel.prototype.getConfig_OK = function(node)
 			OAI_TOKENTIMEOUT  : xml.evalXPath(node, 'oai/tokentimeout'),
 
 			XLINKRESOLVER_ENABLE      : xml.evalXPath(node, 'xlinkResolver/enable'),
+			HIDEWITHHELDELEMENTS_ENABLE      : xml.evalXPath(node, 'hidewithheldelements/enable'),
+			HIDEWITHHELDELEMENTS_keepMarkedElement      : xml.evalXPath(node, 'hidewithheldelements/keepMarkedElement'),
 
 			SEARCHSTATS_ENABLE        : xml.evalXPath(node, 'searchStats/enable'),
 
-            AUTODETECT_ENABLE : xml.evalXPath(node, 'autodetect/enable'),
-            REQUESTED_LANGUAGE_ONLY : xml.evalXPath(node, 'requestedLanguage/only'),
-            REQUESTED_LANGUAGE_SORTED : xml.evalXPath(node, 'requestedLanguage/sorted'),
-            REQUESTED_LANGUAGE_IGNORED : xml.evalXPath(node, 'requestedLanguage/ignored'),
+      AUTODETECT_ENABLE : xml.evalXPath(node, 'autodetect/enable'),
+      REQUESTED_LANGUAGE_ONLY : xml.evalXPath(node, 'requestedLanguage/only'),
+      REQUESTED_LANGUAGE_SORTED : xml.evalXPath(node, 'requestedLanguage/sorted'),
 
 			DOWNLOADSERVICE_LEAVE         : xml.evalXPath(node, 'downloadservice/leave'),
 			DOWNLOADSERVICE_SIMPLE         : xml.evalXPath(node, 'downloadservice/simple'),
@@ -151,6 +153,7 @@ ConfigModel.updateTemp =
 '		<protocol>{SERVER_PROTOCOL}</protocol>'+
 '		<host>{SERVER_HOST}</host>'+
 '		<port>{SERVER_PORT}</port>'+
+'		<securePort>{SERVER_SECURE_PORT}</securePort>'+
 '	</server>'+
 '	<intranet>'+
 '		<network>{INTRANET_NETWORK}</network>'+
@@ -187,6 +190,10 @@ ConfigModel.updateTemp =
 '	<xlinkResolver>'+
 '		<enable>{XLINKRESOLVER_ENABLE}</enable>'+
 '	</xlinkResolver>'+
+'	<hidewithheldelements>'+
+'		<enable>{HIDEWITHHELDELEMENTS_ENABLE}</enable>'+
+'		<keepMarkedElement>{HIDEWITHHELDELEMENTS_keepMarkedElement}</keepMarkedElement>'+
+'	</hidewithheldelements>'+
 '	<searchStats>'+
 '		<enable>{SEARCHSTATS_ENABLE}</enable>'+
 '	</searchStats>'+
@@ -196,7 +203,6 @@ ConfigModel.updateTemp =
 '	<requestedLanguage>'+
 '        <only>{REQUESTED_LANGUAGE_ONLY}</only>' +
 '        <sorted>{REQUESTED_LANGUAGE_SORTED}</sorted>' +
-'        <ignored>{REQUESTED_LANGUAGE_IGNORED}</ignored>' +
 '	</requestedLanguage>'+
 '	<downloadservice>'+
 '		<leave>{DOWNLOADSERVICE_LEAVE}</leave>'+

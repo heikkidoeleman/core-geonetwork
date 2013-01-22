@@ -156,6 +156,7 @@ GeoNetwork.Lang.ca={
     'inspireClassificationDataServices': 'INSPIRE classification data services',
     'serviceType': 'Tipus de servei',
     'serviceType_discovery': 'Discovery Service (discovery)',
+    'serviceType_download': 'Download Service (download)',
     'serviceType_view': 'View Service (view)',
     'serviceType_transformation': 'Transformation Service (transformation)',
     'serviceType_invoke': 'Invoke Spatial Data Service (invoke)',
@@ -256,6 +257,7 @@ GeoNetwork.Lang.ca={
     'status': 'Estat',
     'updateStatus': 'Actualitzar estat',
     'updateVersion': 'Activar versionat',
+    'addLayerSelection': 'Add layers of selection to the map',
     'statusTT': 'Canviar l\'estat d\'un registre segons la fase del seu cicle de vida',
     'setVersioning': 'Versionat de metadades',
     'versioning': 'Activar versionat',
@@ -433,6 +435,23 @@ GeoNetwork.Lang.ca={
     'xmlData': 'XML',
     'minorEdit': 'Modificació menor',
     'minorEditTT': '',
+    
+    'facetMore': '+ Show more',
+    'facetLess': '- Show less',
+    
+    'extractorTitle': 'Download data from ',
+    'defineExtractionArea': 'Define extraction area',
+    'chooseALayer': 'Choose a layer',
+    'outputFormat': 'Output format',
+    'dataDownload': "Download data",
+    'wfsVersion': 'Service version',
+    'wxs-extract-service-not-found': 'Error connecting to the service ${url}. ${misc}.',
+    'wxs-extract-layer-not-found': 'Layer ${layer} not found in WFS (${url}).',
+    'GML2': 'GML 2',
+    'GML3': 'GML 3',
+    'CSV': 'Text CSV',
+    'SHAPE-ZIP': 'ESRI Shapefile',
+    
     // Shortcuts
     'runASearch': 'Executar una cerca.',
     'focusOnAny': 'Moure el cursor al camp de cerca de text.',
@@ -495,6 +514,9 @@ GeoNetwork.Lang.ca={
     'copyTplElTT': 'Crear un nou element en el directori a partir de l\'element seleccionat.',
     'delTplElTT': 'Esborrar la selecció del directori.',
     'language': 'Idioma',
+    'to-iso19139-keyword': 'Text mode',
+    'to-iso19139-keyword-as-xlink': 'Linked mode',
+    'to-iso19139-keyword-with-anchor': 'Anchor mode',
     
     //tabbed search
     'Home': "Pàgina d'inici",

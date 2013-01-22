@@ -289,7 +289,7 @@
 	<cannotRetrieveGroup js="true">Nie można pozyskać grup</cannotRetrieveGroup>
 	<selectNewOwner js="true">Wybierz użytkownika, który będzie nowym właścicielem</selectNewOwner>
 	<selectOwnerGroup js="true">Wybierz grupę, do której należy wybrany użytkownik</selectOwnerGroup>
-	<selectOneFile js="true">Wybierz plik do pobrania!</selectOneFile>
+	<selectOneFileDownload js="true">Wybierz plik do pobrania!</selectOneFileDownload>
 	<checkEmail js="true">Podaj poprawny adres e-mail</checkEmail>
 	<addName js="true">Podaj nazwiskolub organizację</addName>
 	<noComment js="true">Bez komentarza</noComment>
@@ -312,7 +312,7 @@
 	<errorSaveFailed js="true">Błąd: nie można zapisać formularza</errorSaveFailed>
 	<errorOnAction js="true">Błąd: nie można wykonać akcji </errorOnAction>
 	<errorChangeProtocol js="true">Plik mógł zostać załadowany. Nie możesz zmienić protokołu dopóki nie usuniesz tego pliku</errorChangeProtocol>
-	<selectOneFile js="true">Wybierz plik do załadowania!</selectOneFile>
+	<selectOneFileUpload js="true">Wybierz plik do załadowania!</selectOneFileUpload>
 	<uploadFailed js="true">Błąd: ładowanie nieudane! - zwrócono </uploadFailed>
 	<uploadSetFileNameFailed js="true">Błąd: ładowanie powiodło się, ale nie można określić nazwy pliku!</uploadSetFileNameFailed>
 	<cannotGetTooltip js="true">Nie można pobrać podpowiedzi z serwera</cannotGetTooltip>
@@ -594,6 +594,8 @@
 	<login>Login</login>
 	<loginCardTitle>Login / Signup</loginCardTitle>
 	<loginwarning>Wymagane tylko do administrowania</loginwarning>
+	<loginfailure>Login failed.  Incorrect username or password</loginfailure>
+
 	<logout>Wyloguj</logout>
 	<logoutDes>Wyloguj</logoutDes>
 	<longitude>Longitude (między -180 i 180) w stopniach</longitude>
@@ -744,7 +746,7 @@
   <protocolChoice show="-" value="OGC:WCTS">OGC-WCTS Web Coordinate Transformation Service</protocolChoice>
   <protocolChoice show="-" value="OGC:WFS">OGC-WFS Web Feature Service</protocolChoice>
   <protocolChoice show="y" value="OGC:WFS-1.0.0-http-get-capabilities">OGC-WFS Web Feature Service (ver 1.0.0)</protocolChoice>
-  <protocolChoice show="-" value="OGC:WFS-G">OGC-WFS-G Gazzetteer Service</protocolChoice>
+  <protocolChoice show="-" value="OGC:WFS-G">OGC-WFS-G Gazetteer Service</protocolChoice>
   <protocolChoice show="y" value="OGC:WMC-1.1.0-http-get-capabilities">OGC-WMC Web Map Context (ver 1.1)</protocolChoice>
   <protocolChoice show="-" value="OGC:WMS">OGC-WMS Web Map Service</protocolChoice>
   <protocolChoice show="-" value="OGC:WMS-1.1.1-http-get-capabilities">OGC-WMS Capabilities service (ver 1.1.1)</protocolChoice>
@@ -1404,4 +1406,6 @@
     <formatter.admin>Metadata Formatter Admin</formatter.admin>
     <formatter.admin.des>Administration UI for metadata formatting bundlers</formatter.admin.des>
 	<monitor>Monitor</monitor>
+	<concealed>Concealed</concealed>
+	<serviceNotAllowed>You do not have the correct permissions to access the following service {1}</serviceNotAllowed>
 </strings>

@@ -52,6 +52,7 @@
 		<xsl:call-template name="z3950"/>
 		<xsl:call-template name="oai"/>
 		<xsl:call-template name="xlinkResolver"/>
+		<xsl:call-template name="hideWithheld"/>
 		<xsl:call-template name="searchStats"/>
         <xsl:call-template name="multilingual"/>
 		<xsl:call-template name="downloadservice"/>
@@ -87,35 +88,39 @@
             </table>
         </div>
         <div align="left" style="{$style}">
-            <input align="left" type="radio" id="requestedLanguage.only" value="only" name="requestedlanguage"/>
+            <table>
+                <tr>
+                    <td class="padded">
+                        <input id="requestedLanguage.sorted" class="content" type="checkbox"/>
+                    </td>
+                    <td class="padded">
+                        <label for="requestedLanguage.sorted">
+                            <xsl:value-of select="/root/gui/config/requestedlanguagesorted"/>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div align="left" style="{$style}">
         	<label for="requestedLanguage.only">
                 <xsl:value-of select="/root/gui/config/requestedlanguageonly"/>
             </label>
             <div align="left" style="{$style}">
+	            <select id="requestedLanguage.only">
+		             <option id="requestedLanguage.only.locale" value="off"><xsl:value-of select="/root/gui/config/requestedlanguage_offonly"/></option>
+		             <option id="requestedLanguage.only.locale" value="prefer_locale"><xsl:value-of select="/root/gui/config/requestedlanguageprefer_locale"/></option>
+		             <option id="requestedLanguage.only.locale" value="prefer_docLocale"><xsl:value-of select="/root/gui/config/requestedlanguageprefer_docLocale"/></option>
+		             <option id="requestedLanguage.only.locale" value="only_locale"><xsl:value-of select="/root/gui/config/requestedlanguage_localeonly"/></option>
+		             <option id="requestedLanguage.only.docLocale" value="only_docLocale"><xsl:value-of select="/root/gui/config/requestedlanguage_docLocaleonly"/></option>
+		         </select>
+	         </div>
+            <!-- <input align="left" type="radio" id="requestedLanguage.only" value="only" name="requestedlanguage"/>
+        	<label for="requestedLanguage.only">
+                <xsl:value-of select="/root/gui/config/requestedlanguageonly"/>
+            </label> -->
+            <div align="left" style="{$style}">
                 <span id="requestedlanguage_only.subpanel">
                     <xsl:value-of select="/root/gui/config/tips/tip[id='requestedlanguage.only']"/>
-                </span>
-            </div>
-        </div>
-        <div align="left" style="{$style}">
-            <input align="left" type="radio" id="requestedLanguage.sorted" value="sorted" name="requestedlanguage"/>
-            <label for="requestedLanguage.sorted">
-                <xsl:value-of select="/root/gui/config/requestedlanguagesorted"/>
-            </label>
-            <div align="left" style="{$style}">
-                <span id="requestedlanguage_sorted.subpanel">
-                    <xsl:value-of select="/root/gui/config/tips/tip[id='requestedlanguage.sorted']"/>
-                </span>
-            </div>
-        </div>
-        <div align="left" style="{$style}">
-            <input align="left" type="radio" id="requestedLanguage.ignored" value="ignored" name="requestedlanguage"/>
-            <label for="requestedLanguage.ignored">
-                <xsl:value-of select="/root/gui/config/requestedlanguageignored"/>
-            </label>
-            <div align="left" style="{$style}">
-                <span id="requestedlanguage_ignored.subpanel">
-                    <xsl:value-of select="/root/gui/config/tips/tip[id='requestedlanguage.ignored']"/>
                 </span>
             </div>
         </div>
@@ -144,6 +149,24 @@
 				<tr>
 					<td class="padded" width="{$width}"><label for="xlinkResolver.enable"><xsl:value-of select="/root/gui/config/enable"/></label></td>
 					<td class="padded"><input id="xlinkResolver.enable" class="content" type="checkbox"/></td>
+				</tr>
+			</table>
+		</div>
+	</xsl:template>
+
+    <!-- ============================================================================================= -->
+
+	<xsl:template name="hideWithheld">
+		<h1 align="left"><xsl:value-of select="/root/gui/config/hidewithheldelements"/></h1>
+		<div align="left" style="{$style}">
+			<table>
+				<tr>
+					<td class="padded" width="{$width}"><label for="hidewithheldelements.enable"><xsl:value-of select="/root/gui/config/enable"/></label></td>
+					<td class="padded"><input id="hidewithheldelements.enable" class="content" type="checkbox"/></td>
+				</tr>
+				<tr>
+					<td class="padded" width="{$width}"><label for="hidewithheldelements.keepMarkedElement"><xsl:value-of select="/root/gui/config/keepMarkedElement"/></label></td>
+					<td class="padded"><input id="hidewithheldelements.keepMarkedElement" class="content" type="checkbox"/></td>
 				</tr>
 			</table>
 		</div>
@@ -313,6 +336,10 @@
 				<tr>
 					<td class="padded"><xsl:value-of select="/root/gui/config/port"/></td>
 					<td class="padded"><input id="server.port" class="content" type="text" value="" size="30"/></td>
+				</tr>
+				<tr>
+					<td class="padded"><xsl:value-of select="/root/gui/config/securePort"/></td>
+					<td class="padded"><input id="server.secureport" class="content" type="text" value="" size="30"/></td>
 				</tr>
 			</table>
 		</div>
