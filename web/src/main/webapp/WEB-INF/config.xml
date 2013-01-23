@@ -276,8 +276,8 @@
 			<name>main-db</name>
 			<provider>jeeves.resources.dbms.ApacheDBCPool</provider>
 			<config>
-				<user>www-data</user>
-				<password>www-data</password>
+				<user>postgres</user>
+				<password>postgres</password>
 				<!-- we use org.postgis.DriverWrapper in place of
 				org.postgresql.Driver to support both postgresql and postgis -->
 				<driver>org.postgresql.Driver</driver>
@@ -363,7 +363,8 @@
 		<param name="maxWritesInTransaction" value="1" />
 
 		<param name="useSubversion" value="true"/>
-        <param name="readonlyMode" value="true"/>
+        <param name="DBHeartBeatInitialDelaySeconds" value="20"/>
+        <param name="DBHeartBeatFixedDelaySeconds" value="20"/>
         <param name="statusActionsClass" value="org.fao.geonet.services.metadata.DefaultStatusActions"/>
 	</appHandler>
 

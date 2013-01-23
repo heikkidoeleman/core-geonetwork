@@ -170,6 +170,7 @@ public class Geonetwork implements ApplicationHandler {
 		String dataDir =  handlerConfig.getMandatoryValue(Geonet.Config.DATA_DIR);
 		String luceneConfigXmlFile = handlerConfig.getMandatoryValue(Geonet.Config.LUCENE_CONFIG);
 		String summaryConfigXmlFile = handlerConfig.getMandatoryValue(Geonet.Config.SUMMARY_CONFIG);
+
 		logger.info("Data directory: " + systemDataDir);
 
 		setProps(path, handlerConfig);
@@ -460,7 +461,9 @@ public class Geonetwork implements ApplicationHandler {
 			pi.setProxyInfo(proxyHost, new Integer(proxyPort), username, password);
 		}
 
-        createDBHeartBeat(context.getResourceManager(), gnContext);
+        Integer dbHeartBeatInitialDelay = Integer.parseInt(handlerConfig.getValue(Geonet.Config.DB_HEARTBEAT_INITIALDELAYSECONDS, "5"));
+        Integer dbHeartBeatFixedDelay = Integer.parseInt(handlerConfig.getValue(Geonet.Config.DB_HEARTBEAT_FIXEDDELAYSECONDS, "60"));
+        createDBHeartBeat(context.getResourceManager(), gnContext, dbHeartBeatInitialDelay, dbHeartBeatFixedDelay);
 
 		return gnContext;
 	}
@@ -469,7 +472,8 @@ public class Geonetwork implements ApplicationHandler {
      * Sets up a periodic check whether GeoNetwork can successfully write to the database. If it can't, GeoNetwork will
      * automatically switch to read-only mode.
      */
-    private void createDBHeartBeat(final ResourceManager rm, final GeonetContext gnContext) {
+    private void createDBHeartBeat(final ResourceManager rm, final GeonetContext gnContext, Integer initialDelay, Integer fixedDelay) {
+        logger.info("creating DB heartbeat with initial delay of " + initialDelay + " s and fixed delay of " + fixedDelay + " s" );
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         Runnable DBHeartBeat = new Runnable() {
             /**
@@ -494,10 +498,10 @@ public class Geonetwork implements ApplicationHandler {
                     }
                     else {
                         if(readOnly) {
-                            logger.warning("GeoNetwork remains in read-only mode");
+                            logger.info("GeoNetwork remains in read-only mode");
                         }
                         else {
-                            logger.warning("GeoNetwork remains in read-write mode");
+                            logger.info("GeoNetwork remains in read-write mode");
                         }
                     }
                 }
@@ -525,8 +529,7 @@ public class Geonetwork implements ApplicationHandler {
                     return true;
                 }
                 catch (Exception x) {
-                    logger.error("DBHeartBeat SQLException: " + x.getMessage());
-                    x.printStackTrace();
+                    logger.warning("DBHeartBeat SQLException: " + x.getMessage());
                     return false;
                 }
                 finally {
@@ -540,7 +543,7 @@ public class Geonetwork implements ApplicationHandler {
                 }
             }
         };
-        scheduledExecutorService.scheduleWithFixedDelay(DBHeartBeat, 120, 30, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleWithFixedDelay(DBHeartBeat, initialDelay, fixedDelay, TimeUnit.SECONDS);
     }
 
     /**
