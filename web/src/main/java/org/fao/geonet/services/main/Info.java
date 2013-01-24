@@ -51,11 +51,10 @@ import org.fao.geonet.lib.Lib;
 import org.fao.geonet.services.util.z3950.RepositoryInfo;
 import org.jdom.Element;
 
-//=============================================================================
+public class Info implements Service {
+    private static final String READ_ONLY = "readonly";
 
-public class Info implements Service
-{
-	private String xslPath;
+    private String xslPath;
 	private String xmlPath;
 	private String otherSheets;
 	private ServiceConfig _config;
@@ -153,7 +152,11 @@ public class Info implements Service
 		
 		result.addContent(getEnv(context));
 
-		return Xml.transform(result, xslPath +"/info.xsl");
+		Element response = Xml.transform(result, xslPath +"/info.xsl");
+        Element readOnly = new Element(READ_ONLY);
+        readOnly.setText(Boolean.toString(gc.isReadOnly()));
+        response.addContent(readOnly);
+        return response;
 	}
 
 	private Element getAuth(ServiceContext context) {
@@ -498,6 +501,3 @@ public class Info implements Service
 						.addContent(new Element("baseURL").setText(context.getBaseUrl()));
 	}
 }
-
-//=============================================================================
-
