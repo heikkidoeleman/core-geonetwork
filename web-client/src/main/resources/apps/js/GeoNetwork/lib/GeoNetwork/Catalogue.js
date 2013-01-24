@@ -359,6 +359,7 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
             getCategories: serviceUrl + 'xml.info?type=categories',
             getHarvesters: serviceUrl + 'xml.harvesting.get',
             rate: serviceUrl + 'xml.metadata.rate',
+            readOnly: serviceUrl + 'xml.info?type=readonly',
             xmlConfig: serviceUrl + 'xml.config.get',
             admin: serviceUrl + 'admin',
             xmlError: serviceUrl + 'xml.main.error',
@@ -411,6 +412,12 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
      */
     isAdmin: function(){
         return this.adminUser;
+    },
+    /** api: method[isReadOnly]
+     *  Return true if GN is is read-only mode
+     */
+    isReadOnly: function(){
+        return this.readOnly;
     },
     /** api: method[onAfterLogin]
      *  :param e: ``Object``
