@@ -145,7 +145,9 @@ public class Info implements Service {
 			
 			else if (type.equals("auth"))
 				result.addContent(getAuth(context));
-			
+
+            else if(type.equals(READ_ONLY))
+                result.addContent(getReadOnly(gc));
 			else
 				throw new BadParameterEx("Unknown type parameter value.", type);
 		}
@@ -153,11 +155,20 @@ public class Info implements Service {
 		result.addContent(getEnv(context));
 
 		Element response = Xml.transform(result, xslPath +"/info.xsl");
-        Element readOnly = new Element(READ_ONLY);
-        readOnly.setText(Boolean.toString(gc.isReadOnly()));
-        response.addContent(readOnly);
+
         return response;
 	}
+
+    /**
+     * Returns whether GN is in read-only mode (true or false).
+     * @param gc
+     * @return
+     */
+    private Element getReadOnly(GeonetContext gc) {
+        Element readOnly = new Element(READ_ONLY);
+        readOnly.setText(Boolean.toString(gc.isReadOnly()));
+        return readOnly;
+    }
 
 	private Element getAuth(ServiceContext context) {
 		Element auth = new Element("auth");
