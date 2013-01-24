@@ -273,7 +273,7 @@ GeoNetwork.MetadataMenu = Ext.extend(Ext.menu.Menu, {
             this.otherActions = new Ext.menu.Item({
                 text: OpenLayers.i18n('otherActions'),
                 menu: {
-                    items: [this.statusAction]
+                    items: []
                 }
             });
         }
