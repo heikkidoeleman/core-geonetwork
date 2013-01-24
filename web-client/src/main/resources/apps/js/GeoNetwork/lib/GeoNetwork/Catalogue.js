@@ -423,7 +423,7 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
         }), ro, result;
 
         ro = response.responseXML.getElementsByTagName('readonly')[0];
-        result = ro.getTagText();
+        result = ro.nodeValue;
         return result;
     },
     /** api: method[onAfterLogin]
