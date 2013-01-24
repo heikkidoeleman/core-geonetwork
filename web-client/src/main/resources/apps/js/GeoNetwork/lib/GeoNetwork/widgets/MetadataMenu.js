@@ -84,58 +84,56 @@ GeoNetwork.MetadataMenu = Ext.extend(Ext.menu.Menu, {
      },
      
      initAction: function(){        
-    	/* Edit menu */
-        /* TODO : only displayer for logged in users */
-        if(!this.catalogue.isReadOnly()) {
-            this.editAction = new Ext.Action({
-                text: OpenLayers.i18n('edit'),
-                iconCls: 'md-mn-edit',
-                handler: function(){
-                    var id = this.record.get('id');
-                    this.catalogue.metadataEdit(id);
-                },
-                scope: this
-            });
-            this.deleteAction = new Ext.Action({
-                text: OpenLayers.i18n('delete'),
-                iconCls: 'md-mn-del',
-                handler: function(){
-                    var id = this.record.get('uuid');
-                    this.catalogue.metadataDelete(id);
-                },
-                scope: this
-            });
-            /* Other actions */
-            this.duplicateAction = new Ext.Action({
-                text: OpenLayers.i18n('duplicate'),
-                iconCls: 'md-mn-copy',
-                handler: function(){
-                    var id = this.record.get('id');
-                    GeoNetwork.editor.EditorTools.showNewMetadataWindow(this, id, OpenLayers.i18n('duplicate'), false);
-                },
-                scope: this
-            });
-            this.createChildAction = new Ext.Action({
-                text: OpenLayers.i18n('createChild'),
-                iconCls: 'childIcon',
-                handler: function(){
-                    var id = this.record.get('id');
-                    GeoNetwork.editor.EditorTools.showNewMetadataWindow(this, id, OpenLayers.i18n('createChild'), true);
-                },
-                scope: this
-            });
-            // FIXME : tooltip for actions does not work
-            this.adminAction = new Ext.Action({
-                text: OpenLayers.i18n('privileges'),
-                tooltip: OpenLayers.i18n('privilegesTT'),
-                iconCls : 'privIcon',
-                handler: function(){
-                    var id = this.record.get('id');
-                    this.catalogue.metadataAdmin(id);
-                },
-                scope: this
-            });
-        }
+    /* Edit menu */
+    /* TODO : only displayer for logged in users */
+        this.editAction = new Ext.Action({
+            text: OpenLayers.i18n('edit'),
+            iconCls: 'md-mn-edit',
+            handler: function(){
+                var id = this.record.get('id');
+                this.catalogue.metadataEdit(id);
+            },
+            scope: this
+        });
+        this.deleteAction = new Ext.Action({
+            text: OpenLayers.i18n('delete'),
+            iconCls: 'md-mn-del',
+            handler: function(){
+                var id = this.record.get('uuid');
+                this.catalogue.metadataDelete(id);
+            },
+            scope: this
+        });
+        /* Other actions */
+        this.duplicateAction = new Ext.Action({
+            text: OpenLayers.i18n('duplicate'),
+            iconCls: 'md-mn-copy',
+            handler: function(){
+                var id = this.record.get('id');
+                GeoNetwork.editor.EditorTools.showNewMetadataWindow(this, id, OpenLayers.i18n('duplicate'), false);
+            },
+            scope: this
+        });
+        this.createChildAction = new Ext.Action({
+            text: OpenLayers.i18n('createChild'),
+            iconCls: 'childIcon',
+            handler: function(){
+                var id = this.record.get('id');
+                GeoNetwork.editor.EditorTools.showNewMetadataWindow(this, id, OpenLayers.i18n('createChild'), true);
+            },
+            scope: this
+        });
+        // FIXME : tooltip for actions does not work
+        this.adminAction = new Ext.Action({
+            text: OpenLayers.i18n('privileges'),
+            tooltip: OpenLayers.i18n('privilegesTT'),
+            iconCls : 'privIcon',
+            handler: function(){
+                var id = this.record.get('id');
+                this.catalogue.metadataAdmin(id);
+            },
+            scope: this
+        });
 
         this.statusAction = new Ext.Action({
             text: OpenLayers.i18n('status'),
@@ -148,28 +146,26 @@ GeoNetwork.MetadataMenu = Ext.extend(Ext.menu.Menu, {
             scope: this
         });
 
-         if(!this.catalogue.isReadOnly()) {
-             // TODO : enable only if SVN manager is on.
-             this.versioningAction = new Ext.Action({
-                 text: OpenLayers.i18n('versioning'),
-                 tooltip: OpenLayers.i18n('versioningTT'),
-                 iconCls : 'versioningIcon',
-                 handler: function(){
-                     var id = this.record.get('id');
-                     this.catalogue.metadataVersioning(id);
-                 },
-                 scope: this
-             });
-             this.categoryAction = new Ext.Action({
-                 text: OpenLayers.i18n('categories'),
-                 //iconCls : 'md-mn-copy',
-                 handler: function(){
-                     var id = this.record.get('id');
-                     this.catalogue.metadataCategory(id);
-                 },
-                 scope: this
-             });
-         }
+         // TODO : enable only if SVN manager is on.
+         this.versioningAction = new Ext.Action({
+             text: OpenLayers.i18n('versioning'),
+             tooltip: OpenLayers.i18n('versioningTT'),
+             iconCls : 'versioningIcon',
+             handler: function(){
+                 var id = this.record.get('id');
+                 this.catalogue.metadataVersioning(id);
+             },
+             scope: this
+         });
+         this.categoryAction = new Ext.Action({
+             text: OpenLayers.i18n('categories'),
+             //iconCls : 'md-mn-copy',
+             handler: function(){
+                 var id = this.record.get('id');
+                 this.catalogue.metadataCategory(id);
+             },
+             scope: this
+         });
 
         this.adminMenuSeparator = new Ext.menu.Separator();
         
