@@ -417,7 +417,14 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
      *  Return true if GN is is read-only mode
      */
     isReadOnly: function(){
-        return this.readOnly;
+        var response = OpenLayers.Request.GET({
+            url: this.readOnly,
+            async: false
+        }), ro, result;
+
+        ro = response.responseXML.getElementsByTagName('readonly')[0];
+        result = ro.getTagText();
+        return result;
     },
     /** api: method[onAfterLogin]
      *  :param e: ``Object``
