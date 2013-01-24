@@ -3014,6 +3014,7 @@ public class DataManager {
 		String port    = settingMan.getValue(Geonet.Settings.SERVER_PORT);
 		addElement(info, Edit.Info.Elem.BASEURL, protocol + "://" + host + (port == "80" ? "" : ":" + port) + baseURL);
 		addElement(info, Edit.Info.Elem.LOCSERV, "/srv/en" );
+
 		return info;
 	}
 

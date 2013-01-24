@@ -472,7 +472,7 @@ public class Geonetwork implements ApplicationHandler {
      * Sets up a periodic check whether GeoNetwork can successfully write to the database. If it can't, GeoNetwork will
      * automatically switch to read-only mode.
      */
-    private void createDBHeartBeat(final ResourceManager rm, final GeonetContext gnContext, Integer initialDelay, Integer fixedDelay) {
+    private void createDBHeartBeat(final ResourceManager rm, final GeonetContext gc, Integer initialDelay, Integer fixedDelay) {
         logger.info("creating DB heartbeat with initial delay of " + initialDelay + " s and fixed delay of " + fixedDelay + " s" );
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         Runnable DBHeartBeat = new Runnable() {
@@ -481,20 +481,21 @@ public class Geonetwork implements ApplicationHandler {
              */
             public void run() {
                 try {
-                    boolean readOnly = gnContext.isReadOnly();
+                    boolean readOnly = gc.isReadOnly();
                     logger.info("DBHeartBeat: GN is read-only ? " + readOnly);
                     boolean canWrite = checkDBWrite();
+                    HarvestManager hm = gc.getHarvestManager();
                     if(readOnly && canWrite) {
                         logger.warning("GeoNetwork can write to the database, switching to read-write mode");
                         readOnly = false;
-                        gnContext.setReadOnly(readOnly);
-                        gnContext.getHarvestManager().setReadOnly(readOnly);
+                        gc.setReadOnly(readOnly);
+                        hm.setReadOnly(readOnly);
                     }
                     else if(!readOnly && !canWrite) {
                         logger.warning("GeoNetwork can not write to the database, switching to read-only mode");
                         readOnly = true;
-                        gnContext.setReadOnly(readOnly);
-                        gnContext.getHarvestManager().setReadOnly(readOnly);
+                        gc.setReadOnly(readOnly);
+                        hm.setReadOnly(readOnly);
                     }
                     else {
                         if(readOnly) {
@@ -525,7 +526,6 @@ public class Geonetwork implements ApplicationHandler {
                     dbms.execute(insert, testId, new Integer("1"), "DBHeartBeat", "Yeah !");
                     String remove = "DELETE FROM Settings WHERE id=?";
                     dbms.execute(remove, testId);
-                    System.out.println("PING SUCCESS!");
                     return true;
                 }
                 catch (Exception x) {

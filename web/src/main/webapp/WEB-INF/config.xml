@@ -137,7 +137,7 @@
 	-->
 
 	<resources>
-	  <resource enabled="true">
+	  <resource enabled="false">
 	    <name>main-db</name>
 	    <provider>jeeves.resources.dbms.ApacheDBCPool</provider>
 	    <config>
@@ -272,7 +272,7 @@
 		<!-- postgresql -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		
-		<resource enabled="false">
+		<resource enabled="true">
 			<name>main-db</name>
 			<provider>jeeves.resources.dbms.ApacheDBCPool</provider>
 			<config>
@@ -292,7 +292,7 @@
 					jdbc:postgresql_postGIS://host:port/database
 					
 				-->
-				<url>jdbc:postgresql://localhost:5432/geonetwork</url>
+				<url>jdbc:postgresql://localhost:5432/readonly</url>
 				<poolSize>10</poolSize>
 				<validationQuery>SELECT 1</validationQuery>
 			</config>
