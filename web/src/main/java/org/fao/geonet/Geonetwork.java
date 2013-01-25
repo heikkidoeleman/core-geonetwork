@@ -476,8 +476,8 @@ public class Geonetwork implements ApplicationHandler {
         logger.info("creating DB heartbeat with initial delay of " + initialDelay + " s and fixed delay of " + fixedDelay + " s" );
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         Runnable DBHeartBeat = new Runnable() {
-            private final String INSERT = "INSERT INTO Settings(id, parentId, name, value) VALUES(?, ?, ?, ?)";
-            private final String REMOVE = "DELETE FROM Settings WHERE id=?";
+            private static final String INSERT = "INSERT INTO Settings(id, parentId, name, value) VALUES(?, ?, ?, ?)";
+            private static final String REMOVE = "DELETE FROM Settings WHERE id=?";
 
             /**
              *
