@@ -476,9 +476,13 @@ public class Geonetwork implements ApplicationHandler {
         logger.info("creating DB heartbeat with initial delay of " + initialDelay + " s and fixed delay of " + fixedDelay + " s" );
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         Runnable DBHeartBeat = new Runnable() {
+            private final String INSERT = "INSERT INTO Settings(id, parentId, name, value) VALUES(?, ?, ?, ?)";
+            private final String REMOVE = "DELETE FROM Settings WHERE id=?";
+
             /**
              *
              */
+            @Override
             public void run() {
                 try {
                     boolean readOnly = gc.isReadOnly();
@@ -521,15 +525,13 @@ public class Geonetwork implements ApplicationHandler {
                 Dbms dbms = null;
                 try {
                     Integer testId = new Integer("100000");
-                    String insert = "INSERT INTO Settings(id, parentId, name, value) VALUES(?, ?, ?, ?)";
                     dbms = (Dbms) rm.openDirect(Geonet.Res.MAIN_DB);
-                    dbms.execute(insert, testId, new Integer("1"), "DBHeartBeat", "Yeah !");
-                    String remove = "DELETE FROM Settings WHERE id=?";
-                    dbms.execute(remove, testId);
+                    dbms.execute(INSERT, testId, new Integer("1"), "DBHeartBeat", "Yeah !");
+                    dbms.execute(REMOVE, testId);
                     return true;
                 }
                 catch (Exception x) {
-                    logger.warning("DBHeartBeat SQLException: " + x.getMessage());
+                    logger.info("DBHeartBeat Exception: " + x.getMessage());
                     return false;
                 }
                 finally {
