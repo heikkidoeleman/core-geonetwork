@@ -4,6 +4,7 @@ import jeeves.interfaces.Service;
 import jeeves.server.ServiceConfig;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Log;
+import org.apache.commons.logging.LogFactory;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.jdom.Element;
@@ -13,6 +14,8 @@ import org.jdom.Element;
  * @author heikki doeleman
  */
 public abstract class NotInReadOnlyModeService implements Service{
+    private org.apache.commons.logging.Log log = LogFactory.getLog(NotInReadOnlyModeService.class);
+
     @Override
     public void init(String appPath, ServiceConfig params) throws Exception {}
 
@@ -24,8 +27,7 @@ public abstract class NotInReadOnlyModeService implements Service{
             return serviceSpecificExec(params, context);
         }
         else {
-            Log.debug(Geonet.DATA_MANAGER, "GeoNetwork is operating in read-only mode. Service execution skipped.");
-            System.out.println("GeoNetwork is operating in read-only mode. Service execution skipped.");
+            log.debug("GeoNetwork is operating in read-only mode. Service execution skipped.");
             return null;
         }
     }
