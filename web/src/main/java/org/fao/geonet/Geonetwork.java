@@ -461,10 +461,15 @@ public class Geonetwork implements ApplicationHandler {
 			pi.setProxyInfo(proxyHost, new Integer(proxyPort), username, password);
 		}
 
-        Integer dbHeartBeatInitialDelay = Integer.parseInt(handlerConfig.getValue(Geonet.Config.DB_HEARTBEAT_INITIALDELAYSECONDS, "5"));
-        Integer dbHeartBeatFixedDelay = Integer.parseInt(handlerConfig.getValue(Geonet.Config.DB_HEARTBEAT_FIXEDDELAYSECONDS, "60"));
-        createDBHeartBeat(context.getResourceManager(), gnContext, dbHeartBeatInitialDelay, dbHeartBeatFixedDelay);
-
+        //
+        // db heartbeat configuration -- for failover to readonly database
+        //
+        boolean dbHeartBeatEnabled = Boolean.parseBoolean(handlerConfig.getValue(Geonet.Config.DB_HEARTBEAT_ENABLED, "false"));
+        if(dbHeartBeatEnabled) {
+            Integer dbHeartBeatInitialDelay = Integer.parseInt(handlerConfig.getValue(Geonet.Config.DB_HEARTBEAT_INITIALDELAYSECONDS, "5"));
+            Integer dbHeartBeatFixedDelay = Integer.parseInt(handlerConfig.getValue(Geonet.Config.DB_HEARTBEAT_FIXEDDELAYSECONDS, "60"));
+            createDBHeartBeat(context.getResourceManager(), gnContext, dbHeartBeatInitialDelay, dbHeartBeatFixedDelay);
+        }
 		return gnContext;
 	}
 
@@ -486,7 +491,7 @@ public class Geonetwork implements ApplicationHandler {
             public void run() {
                 try {
                     boolean readOnly = gc.isReadOnly();
-                    logger.info("DBHeartBeat: GN is read-only ? " + readOnly);
+                    logger.debug("DBHeartBeat: GN is read-only ? " + readOnly);
                     boolean canWrite = checkDBWrite();
                     HarvestManager hm = gc.getHarvestManager();
                     if(readOnly && canWrite) {
@@ -506,7 +511,7 @@ public class Geonetwork implements ApplicationHandler {
                             logger.info("GeoNetwork remains in read-only mode");
                         }
                         else {
-                            logger.info("GeoNetwork remains in read-write mode");
+                            logger.debug("GeoNetwork remains in read-write mode");
                         }
                     }
                 }
